@@ -1,17 +1,32 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default function withHandler(
+export interface ResponseType{
+  ok:boolean;
+  [key:string]:any;
+}
+
+interface ConfigType{
   method: "GET" | "POST" | "DELETE",
-  fn: (req: NextApiRequest, res: NextApiResponse) => void
+  handler: (req: NextApiRequest, res: NextApiResponse) => void,
+  isPrivate?:boolean
+}
+
+export default function withHandler(
+  {method,
+    isPrivate = true,
+    handler}:ConfigType
 ) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== method) {
       return res.status(405).end();
     }
+    if(isPrivate && !req.session.user){
+      return res.status(401).json({ok:false, error:"plz login in"})
+    }
     try {
-      await fn(req, res);
+      await handler(req, res);
     } catch (error) {
-      console.log(error);
+      console.log("error",error);
       return res.status(500).json({ error });
     }
   };
