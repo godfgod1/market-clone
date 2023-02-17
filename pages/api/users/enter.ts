@@ -101,5 +101,5 @@ return res.json({
 }
 
 // export default handler
-export default withHandler({ method: "GET", handler,} );
+export default withHandler({ methods: ["GET"], handler,} );
 // export default withHandler({ methods: ["POST"], handler, isPrivate: false });
