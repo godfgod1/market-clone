@@ -2,8 +2,14 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import Script from "next/script";
+import useUser from '@libs/client/useUser';
+import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter()
+  
+  const {user, isLoading} = useUser(pathname)
+  console.log('user',user );
   console.log("APP IS RUNNING");
   return (
     <SWRConfig
@@ -13,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <div className="w-full max-w-xl mx-auto">
-        <Component {...pageProps} />
+        <Component {...pageProps} c/>
       </div>
       {/*       <Script
         src="https://developers.kakao.com/sdk/js/kakao.js"

@@ -1,15 +1,18 @@
 import { useRouter } from 'next/router';
+import path from 'path';
 import { useEffect, useState } from 'react';
 import useSWR from "swr";
 
 
-
-export default function useUser(){
+export default function useUser(pathname:string){
   const {data, error}  = useSWR("/api/users/me")
   const router = useRouter();
-
-  useEffect(()=>{
-   
+  useEffect(()=>{ 
+    if(pathname ==='/enter') return
+    console.log('userData',data );
+    if (data && !data.ok) {
+      router.replace("/enter");
+    }
   },[data,router])
   
 

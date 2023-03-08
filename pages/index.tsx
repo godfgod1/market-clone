@@ -2,36 +2,41 @@ import type { NextPage } from "next";
 import FloatingButton from "@components/floating-button";
 import Item from "@components/item";
 import Layout from "@components/layout";
-import useUser from '@libs/client/useUser';
-import useSWR from 'swr';
-import { Product } from '@prisma/client';
+import useUser from "@libs/client/useUser";
+import Head from "next/head";
+import useSWR from "swr";
+import { Product } from "@prisma/client";
 
-interface ProductWithCount extends Product {
-  _count:any;
+export interface ProductWithCount extends Product {
+  _count: {
+    favs: number;
+  };
 }
-interface ProductsResponse{
-  ok:boolean;
-  products:ProductWithCount[]
+
+interface ProductsResponse {
+  ok: boolean;
+  products: ProductWithCount[];
 }
 
 const Home: NextPage = () => {
-  const {user, isLoading} = useUser();
-  const {data} = useSWR<ProductsResponse>("/api/products")
-  console.log('data',data)  
+  const { user, isLoading } = useUser('');
+  const { data } = useSWR<ProductsResponse>("/api/products");
   return (
     <Layout title="홈" hasTabBar>
+      <Head>
+        <title>Home</title>
+      </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products?.map((product, i) => {
-          return (
-            <Item
-              id={product.id}
-              key={product.id}
-              title={product.name}
-              price={product.price}
-              comments={1}
-              hearts={product._count.Fav} />
-          );
-        })}
+        {data?.products?.map((product) => (
+          <Item
+            id={product.id}
+            key={product.id}
+            title={product.name}
+            price={product.price}
+            hearts={product._count.favs}
+            // comments={1}
+          />
+        ))}
         <FloatingButton href="/products/upload">
           <svg
             className="h-6 w-6"
