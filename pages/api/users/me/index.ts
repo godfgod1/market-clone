@@ -20,7 +20,7 @@ async function handler(
   console.log(profile)
   res.json({
     ok: true,
-    ...profile
+    profile
   })
 
 }

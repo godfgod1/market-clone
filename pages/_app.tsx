@@ -4,12 +4,10 @@ import { SWRConfig } from "swr";
 import Script from "next/script";
 import useUser from '@libs/client/useUser';
 import { useRouter } from 'next/router';
+import { User } from '@prisma/client';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { pathname } = useRouter()
-  
-  const {user, isLoading} = useUser(pathname)
-  console.log('user',user );
+   useRouter()
   console.log("APP IS RUNNING");
   return (
     <SWRConfig
@@ -19,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <div className="w-full max-w-xl mx-auto">
-        <Component {...pageProps} c/>
+        <Component {...pageProps} />
       </div>
       {/*       <Script
         src="https://developers.kakao.com/sdk/js/kakao.js"
