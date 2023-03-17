@@ -13,27 +13,27 @@ async function handler(
   } = req;
   const stream = await client.stream.findUnique({
     where: {
-      id: +id.toString(),
+      id: +id!.toString(),
     },
     include: {
-      messages: {
+      Message: {
         select: {
-          id: true,
+          id:true,
           message: true,
           user: {
             select: {
               avatar: true,
-              id: true,
-            },
-          },
-        },
-      },
-    },
+              id: true
+            }
+          }
+        }
+      }
+    }
   });
   const isOwner = stream?.userId === user?.id;
   if (stream && !isOwner) {
-    stream.cloudflareKey = "xxxxx";
-    stream.cloudflareUrl = "xxxxx";
+    // stream.cloudflareKey = "xxxxx";
+    // stream.cloudflareUrl = "xxxxx";
   }
   res.json({ ok: true, stream });
 }
